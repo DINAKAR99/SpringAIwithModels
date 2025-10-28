@@ -21,16 +21,16 @@ public class OllamaController {
     @GetMapping("/{message}")
     public ResponseEntity<String> getAnswer(@PathVariable String message) {
 
-        ChatResponse chatResponse = chatClient
-                .prompt(message)
-                .call()
-                .chatResponse();
+        // ChatResponse chatResponse = chatClient
+        // .prompt(message)
+        // .call()
+        // .chatResponse();
 
-        System.out.println(chatResponse.getMetadata().getModel());
+        // System.out.println(chatResponse.getMetadata().getModel());
 
-        String response = chatResponse.getResult().getOutput().getText();
+        // String response = chatResponse.getResult().getOutput().getText();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("response");
     }
 
 }

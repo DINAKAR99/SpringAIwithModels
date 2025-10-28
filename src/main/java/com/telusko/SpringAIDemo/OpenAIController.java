@@ -20,7 +20,7 @@ public class OpenAIController {
 
         String response = chatModel.call(message);
 
-        return ResponseEntity.ok("response");
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -100,7 +100,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Exploring Different LLM Models</h1>
+      <h1>LLM Models</h1>
 
       <div className="shared-prompt-container">
         <div className="shared-prompt-area">
