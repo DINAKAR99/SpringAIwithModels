@@ -16,8 +16,8 @@ function App() {
   const [responseOrder, setResponseOrder] = useState([]);
 
   const models = [
-    { id: "openai", name: "Chat GPT-4o", color: "#271715ff" },
-    { id: "ollama", name: "Ollama local", color: "#E67E22" },
+    { id: "openaai", name: "Chat GPT-4o", color: "#271715ff" },
+    { id: "rag-lite", name: "Ollama local", color: "#E67E22" },
   ];
 
   const handlePromptChange = useCallback((value) => {
@@ -108,15 +108,14 @@ function App() {
             placeholder="Enter a prompt to send to all models..."
             value={sharedPrompt}
             onChange={(e) => handlePromptChange(e.target.value)}
-           />
+          />
 
           <button
             onClick={handleSubmit}
             style={{ marginTop: "30px" }}
-           
             className="submit-all-btn"
           >
-            { "Send"}
+            {"Send"}
           </button>
         </div>
       </div>
