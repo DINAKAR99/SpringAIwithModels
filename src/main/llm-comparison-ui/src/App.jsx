@@ -28,7 +28,7 @@ function App() {
     try {
       const encodedPrompt = encodeURIComponent(prompt);
       const response = await fetch(
-        `http://localhost:8080/api/${model}/${encodedPrompt}`
+        `http://localhost:8081/api/${model}/${encodedPrompt}`
       );
 
       if (!response.ok) {
@@ -108,16 +108,15 @@ function App() {
             placeholder="Enter a prompt to send to all models..."
             value={sharedPrompt}
             onChange={(e) => handlePromptChange(e.target.value)}
-            disabled={isLoading}
-          />
+           />
 
           <button
             onClick={handleSubmit}
             style={{ marginTop: "30px" }}
-            disabled={isLoading || !sharedPrompt.trim()}
+           
             className="submit-all-btn"
           >
-            {isLoading ? "Sending..." : "Send"}
+            { "Send"}
           </button>
         </div>
       </div>
