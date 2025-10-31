@@ -9,11 +9,11 @@ import java.util.List;
 @Service
 public class KnowledgeBaseLoader {
 
-    private final VectorStore vectorStore;
+    // private final VectorStore vectorStore;
 
-    public KnowledgeBaseLoader(VectorStore vectorStore) {
-        this.vectorStore = vectorStore;
-    }
+    // public KnowledgeBaseLoader(VectorStore vectorStore) {
+    // this.vectorStore = vectorStore;
+    // }
 
     // @PostConstruct
     // public void loadDocs() {
