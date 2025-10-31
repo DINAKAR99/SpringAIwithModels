@@ -1,3 +1,4 @@
+package com.dinakar.SpringAIDemo.service;
 // package com.telusko.SpringAIDemo.service;
 
 // import org.springframework.ai.chat.client.ChatClient;

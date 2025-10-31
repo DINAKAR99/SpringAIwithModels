@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

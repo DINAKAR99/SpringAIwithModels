@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
 
 import java.util.Random;
 

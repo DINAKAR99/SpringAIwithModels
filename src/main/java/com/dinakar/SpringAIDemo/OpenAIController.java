@@ -1,5 +1,5 @@
 
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
  import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

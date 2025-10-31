@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo.service;
+package com.dinakar.SpringAIDemo.service;
 
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;

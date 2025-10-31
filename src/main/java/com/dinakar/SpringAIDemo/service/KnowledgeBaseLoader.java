@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo.service;
+package com.dinakar.SpringAIDemo.service;
 
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.document.Document;
