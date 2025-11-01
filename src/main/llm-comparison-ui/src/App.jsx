@@ -16,7 +16,7 @@ function App() {
   const [responseOrder, setResponseOrder] = useState([]);
 
   const models = [
-    { id: "openaai", name: "Chat GPT-4o", color: "#271715ff" },
+    { id: "ollama", name: "Chat GPT-4o", color: "#271715ff" },
     { id: "rag-lite", name: "Ollama local", color: "#E67E22" },
   ];
 
