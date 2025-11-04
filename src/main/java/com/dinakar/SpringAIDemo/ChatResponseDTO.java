@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
 
 import java.util.List;
 
@@ -11,21 +11,56 @@ public class ChatResponseDTO {
     private List<Choice> choices;
     private Usage usage;
 
-    // getters and setters
-
+    // ✅ Nested classes
     public static class Choice {
         private String finish_reason;
         private int index;
         private Message message;
 
-        // getters and setters
+        public String getFinish_reason() {
+            return finish_reason;
+        }
+
+        public void setFinish_reason(String finish_reason) {
+            this.finish_reason = finish_reason;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public Message getMessage() {
+            return message;
+        }
+
+        public void setMessage(Message message) {
+            this.message = message;
+        }
     }
 
     public static class Message {
         private String content;
         private String role;
 
-        // getters and setters
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
+        }
     }
 
     public static class Usage {
@@ -33,17 +68,47 @@ public class ChatResponseDTO {
         private int prompt_tokens;
         private int total_tokens;
 
-        // getters and setters
+        public int getCompletion_tokens() {
+            return completion_tokens;
+        }
+
+        public void setCompletion_tokens(int completion_tokens) {
+            this.completion_tokens = completion_tokens;
+        }
+
+        public int getPrompt_tokens() {
+            return prompt_tokens;
+        }
+
+        public void setPrompt_tokens(int prompt_tokens) {
+            this.prompt_tokens = prompt_tokens;
+        }
+
+        public int getTotal_tokens() {
+            return total_tokens;
+        }
+
+        public void setTotal_tokens(int total_tokens) {
+            this.total_tokens = total_tokens;
+        }
     }
 
-    // Optional: helper method
+    // ✅ Helper method
     public String getFirstMessageContent() {
         if (choices != null && !choices.isEmpty()) {
-            return choices.get(0).getMessage().getContent();
+            Choice first = choices.get(0);
+            if (first != null && first.getMessage() != null) {
+                return first.getMessage().getContent();
+            } else {
+                System.err.println("⚠️ Message object is null in first choice!");
+            }
+        } else {
+            System.err.println("⚠️ Choices list is empty or null!");
         }
         return null;
     }
 
+    // ✅ Getters/Setters
     public String getId() {
         return id;
     }
@@ -91,5 +156,4 @@ public class ChatResponseDTO {
     public void setUsage(Usage usage) {
         this.usage = usage;
     }
-
 }

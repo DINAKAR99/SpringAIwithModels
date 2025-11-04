@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dinakar.SpringAIDemo.service.VectorStoreConfig;
+
 @RestController
 @RequestMapping("/api/rag-lite")
 @CrossOrigin("*")
@@ -30,6 +32,9 @@ public class LocalRAGController {
     private final OpenAiChatModel chatModel;
     private final JdbcTemplate jdbcTemplate;
     private final Map<String, String> docs = new HashMap<>();
+
+    @Autowired
+    VectorStoreConfig vectorStoreConfig;
 
     @Autowired
     public LocalRAGController(OpenAiChatModel chatModel, JdbcTemplate jdbcTemplate) throws IOException {
@@ -64,10 +69,12 @@ public class LocalRAGController {
 
                 Question:
                 %s
-                """.formatted(context, message);
+                """
+                .formatted(context, message);
 
-        String response = chatModel.call(prompt);
-        return ResponseEntity.ok(response);
+        // String response = chatModel.call(prompt);
+        ChatResponseDTO response = vectorStoreConfig.chat(prompt);
+        return ResponseEntity.ok(response.getChoices().get(0).getMessage().getContent());
     }
 
     private String getBestDoc(String message) {
@@ -82,134 +89,138 @@ public class LocalRAGController {
         return (int) words.stream().filter(doc.toLowerCase()::contains).count();
     }
 
-   private String getDbContext(String message) {
-    message = message.toLowerCase();
-    StringBuilder responseBuilder = new StringBuilder();
+    private String getDbContext(String message) {
+        message = message.toLowerCase();
+        StringBuilder responseBuilder = new StringBuilder();
 
-    // 🧠 1️⃣ Fetch available programming languages
-    // if (messageContains(message, "programming", "language", "languages", "available")) {
-    //     try {
-    //         List<String> categories = jdbcTemplate.queryForList("SELECT cname FROM category", String.class);
-    //         responseBuilder.append("💻 Programming languages available: ")
-    //                 .append(String.join(", ", categories))
-    //                 .append("\n\n");
-    //     } catch (Exception e) {
-    //         responseBuilder.append("❌ Couldn't fetch programming languages from DB.\n\n");
-    //     }
-    // }
+        // 🧠 1️⃣ Fetch available programming languages
+        // if (messageContains(message, "programming", "language", "languages",
+        // "available")) {
+        // try {
+        // List<String> categories = jdbcTemplate.queryForList("SELECT cname FROM
+        // category", String.class);
+        // responseBuilder.append("💻 Programming languages available: ")
+        // .append(String.join(", ", categories))
+        // .append("\n\n");
+        // } catch (Exception e) {
+        // responseBuilder.append("❌ Couldn't fetch programming languages from
+        // DB.\n\n");
+        // }
+        // }
 
-    // 🚗 2️⃣ Vehicle owner details by mobile
-    if (messageContains(message, "vehicle", "owner", "mobile", "number")) {
-        String ownerDetails = fetchOwnerDetailsByMobile(message);
-        responseBuilder.append(ownerDetails).append("\n\n");
-    }
-    if (messageContains(message, "sand", "booking", "status", "user")) {
-        String ownerDetails = fetchBookingDetailsByMobile(message);
-        responseBuilder.append(ownerDetails).append("\n\n");
-    }
-
-    // 🎯 3️⃣ Detect roll IDs (like R1023 or 12345)
-    // if (message.matches(".*\\b(r\\d+|\\d{4,})\\b.*")) {
-    //     try {
-    //         String rollId = message.replaceAll(".*\\b(r\\d+|\\d{4,})\\b.*", "$1").toUpperCase();
-    //         List<Map<String, Object>> exams = jdbcTemplate.queryForList(
-    //                 "SELECT exam_name, exam_date, exam_time FROM student_exam WHERE roll_id = ?",
-    //                 rollId);
-
-    //         if (exams.isEmpty()) {
-    //             responseBuilder.append("📋 No exams scheduled for roll ID: ").append(rollId).append("\n\n");
-    //         } else {
-    //             responseBuilder.append("📚 Exam schedule for roll ID ").append(rollId).append(":\n");
-    //             for (Map<String, Object> exam : exams) {
-    //                 responseBuilder.append("- ")
-    //                         .append(exam.get("exam_name")).append(" on ")
-    //                         .append(exam.get("exam_date")).append(" at ")
-    //                         .append(exam.get("exam_time")).append("\n");
-    //             }
-    //             responseBuilder.append("\n");
-    //         }
-
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         responseBuilder.append("⚠️ Error fetching exam schedule.\n\n");
-    //     }
-    // }
-
-    // 🧩 Default fallback if nothing matched
-    if (responseBuilder.length() == 0) {
-        return "🤷‍♂️ I couldn't find any matching info in your message.";
-    }
-
-    return responseBuilder.toString().trim();
-}
-
-public String fetchBookingDetailsByMobile(String message) {
-    // 🔍 Regex pattern to match exactly 13-digit numbers
-      Pattern idPattern = Pattern.compile("\\b\\d{6}\\b");
-    Matcher matcher = idPattern.matcher(message);
-
-    if (matcher.find()) {
-        String mobileNumber = matcher.group(0); 
-
-        try {
-            // 🧭 SQL query to fetch vehicle/owner details
-            String sql = "SELECT sm.status_name ,customer_name,payment_amount FROM customer_details cd " + //
-                                "LEFT JOIN status_mst sm ON sm.status_id = cd.status_id " + //
-                                                                        " WHERE cd.customer_id =?";
-            Map<String, Object> result = jdbcTemplate.queryForMap(sql, Integer.parseInt(mobileNumber));
-
-            // 🎯 Return formatted details
-            return String.format(
-                "sand Booking Details for %s:\n👤 Name: %s\n🚗 payment_amount: %s\n📅 status_name : %s\n📍 ",
-                mobileNumber, 
-                result.getOrDefault("customer_name", "N/A"),
-                result.getOrDefault("payment_amount", "N/A"),
-                result.getOrDefault("status_name", "N/A")
-             );
-
-        } catch (EmptyResultDataAccessException e) {
-            return "❌ No records found for mobile number: " + mobileNumber;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "⚠️ Something went wrong while fetching owner details.";
+        // 🚗 2️⃣ Vehicle owner details by mobile
+        if (messageContains(message, "vehicle", "owner", "mobile", "number")) {
+            String ownerDetails = fetchOwnerDetailsByMobile(message);
+            responseBuilder.append(ownerDetails).append("\n\n");
         }
-    } else {
-        return "Please provide a valid 6-digit booking id  in your message.";
-    }
-}
-public String fetchOwnerDetailsByMobile(String message) {
-    // 🔍 Regex pattern to match exactly 13-digit numbers
-      Pattern idPattern = Pattern.compile("\\b\\d{13}\\b");
-    Matcher matcher = idPattern.matcher(message);
-
-    if (matcher.find()) {
-        String mobileNumber = matcher.group(0); 
-
-        try {
-            // 🧭 SQL query to fetch vehicle/owner details
-            String sql = "SELECT owner_name,address,bank_acc_holder_name FROM vehicle_owner_details vod  WHERE mobile_no = ?";
-            Map<String, Object> result = jdbcTemplate.queryForMap(sql, mobileNumber);
-
-            // 🎯 Return formatted details
-            return String.format(
-                "📞 Owner Details for %s:\n👤 Name: %s\n🚗 address: %s\n📅 bank_acc_holder_name On: %s\n📍 ",
-                mobileNumber,
-                result.getOrDefault("owner_name", "N/A"),
-                result.getOrDefault("address", "N/A"),
-                result.getOrDefault("bank_acc_holder_name", "N/A")
-             );
-
-        } catch (EmptyResultDataAccessException e) {
-            return "❌ No records found for mobile number: " + mobileNumber;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "⚠️ Something went wrong while fetching owner details.";
+        if (messageContains(message, "sand", "booking", "status", "user")) {
+            String ownerDetails = fetchBookingDetailsByMobile(message);
+            responseBuilder.append(ownerDetails).append("\n\n");
         }
-    } else {
-        return "Please provide a valid 10-digit mobile number in your message.";
-    }
-}
 
+        // 🎯 3️⃣ Detect roll IDs (like R1023 or 12345)
+        // if (message.matches(".*\\b(r\\d+|\\d{4,})\\b.*")) {
+        // try {
+        // String rollId = message.replaceAll(".*\\b(r\\d+|\\d{4,})\\b.*",
+        // "$1").toUpperCase();
+        // List<Map<String, Object>> exams = jdbcTemplate.queryForList(
+        // "SELECT exam_name, exam_date, exam_time FROM student_exam WHERE roll_id = ?",
+        // rollId);
+
+        // if (exams.isEmpty()) {
+        // responseBuilder.append("📋 No exams scheduled for roll ID:
+        // ").append(rollId).append("\n\n");
+        // } else {
+        // responseBuilder.append("📚 Exam schedule for roll ID
+        // ").append(rollId).append(":\n");
+        // for (Map<String, Object> exam : exams) {
+        // responseBuilder.append("- ")
+        // .append(exam.get("exam_name")).append(" on ")
+        // .append(exam.get("exam_date")).append(" at ")
+        // .append(exam.get("exam_time")).append("\n");
+        // }
+        // responseBuilder.append("\n");
+        // }
+
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // responseBuilder.append("⚠️ Error fetching exam schedule.\n\n");
+        // }
+        // }
+
+        // 🧩 Default fallback if nothing matched
+        if (responseBuilder.length() == 0) {
+            return "🤷‍♂️ I couldn't find any matching info in your message.";
+        }
+
+        return responseBuilder.toString().trim();
+    }
+
+    public String fetchBookingDetailsByMobile(String message) {
+        // 🔍 Regex pattern to match exactly 13-digit numbers
+        Pattern idPattern = Pattern.compile("\\b\\d{6}\\b");
+        Matcher matcher = idPattern.matcher(message);
+
+        if (matcher.find()) {
+            String mobileNumber = matcher.group(0);
+
+            try {
+                // 🧭 SQL query to fetch vehicle/owner details
+                String sql = "SELECT sm.status_name ,customer_name,payment_amount FROM customer_details cd " + //
+                        "LEFT JOIN status_mst sm ON sm.status_id = cd.status_id " + //
+                        " WHERE cd.customer_id =?";
+                Map<String, Object> result = jdbcTemplate.queryForMap(sql, Integer.parseInt(mobileNumber));
+
+                // 🎯 Return formatted details
+                return String.format(
+                        "sand Booking Details for %s:\n👤 Name: %s\n🚗 payment_amount: %s\n📅 status_name : %s\n📍 ",
+                        mobileNumber,
+                        result.getOrDefault("customer_name", "N/A"),
+                        result.getOrDefault("payment_amount", "N/A"),
+                        result.getOrDefault("status_name", "N/A"));
+
+            } catch (EmptyResultDataAccessException e) {
+                return "❌ No records found for mobile number: " + mobileNumber;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "⚠️ Something went wrong while fetching owner details.";
+            }
+        } else {
+            return "Please provide a valid 6-digit booking id  in your message.";
+        }
+    }
+
+    public String fetchOwnerDetailsByMobile(String message) {
+        // 🔍 Regex pattern to match exactly 13-digit numbers
+        Pattern idPattern = Pattern.compile("\\b\\d{13}\\b");
+        Matcher matcher = idPattern.matcher(message);
+
+        if (matcher.find()) {
+            String mobileNumber = matcher.group(0);
+
+            try {
+                // 🧭 SQL query to fetch vehicle/owner details
+                String sql = "SELECT owner_name,address,bank_acc_holder_name FROM vehicle_owner_details vod  WHERE mobile_no = ?";
+                Map<String, Object> result = jdbcTemplate.queryForMap(sql, mobileNumber);
+
+                // 🎯 Return formatted details
+                return String.format(
+                        "📞 Owner Details for %s:\n👤 Name: %s\n🚗 address: %s\n📅 bank_acc_holder_name On: %s\n📍 ",
+                        mobileNumber,
+                        result.getOrDefault("owner_name", "N/A"),
+                        result.getOrDefault("address", "N/A"),
+                        result.getOrDefault("bank_acc_holder_name", "N/A"));
+
+            } catch (EmptyResultDataAccessException e) {
+                return "❌ No records found for mobile number: " + mobileNumber;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "⚠️ Something went wrong while fetching owner details.";
+            }
+        } else {
+            return "Please provide a valid 10-digit mobile number in your message.";
+        }
+    }
 
     private boolean isSimilar(String input, String keyword) {
         LevenshteinDistance distance = new LevenshteinDistance();

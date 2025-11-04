@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.telusko.SpringAIDemo.ChatResponseDTO;
+import com.dinakar.SpringAIDemo.ChatResponseDTO;
 
 @Configuration
 public class VectorStoreConfig {
@@ -63,14 +63,15 @@ public class VectorStoreConfig {
                 "model", "ollama/CGG-Assisted-Coder:latest",
                 "messages", List.of(message));
 
-        ChatResponseDTO response = restClient().post()
-                .uri("/api/chat")
+        ChatResponseDTO chatResponse = restClient().post()
+                .uri("/chat/completions")
                 .body(body)
                 .retrieve()
                 .body(ChatResponseDTO.class);
 
-        System.out.println("🧠 Ollama said: " + response.getFirstMessageContent());
-        return response;
+        System.out.println("First message: " + chatResponse.getFirstMessageContent());
+
+        return chatResponse;
     }
 
 }

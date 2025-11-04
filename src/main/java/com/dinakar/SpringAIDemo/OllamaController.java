@@ -1,18 +1,16 @@
 package com.dinakar.SpringAIDemo;
 
-import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.ai.ollama.api.OllamaApi;
-import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.telusko.SpringAIDemo.service.VectorStoreConfig;
+import com.dinakar.SpringAIDemo.service.VectorStoreConfig;
 
 @RestController
 @RequestMapping("/api/ollama")
@@ -38,9 +36,9 @@ public class OllamaController {
 
         // System.out.println(chatResponse.getMetadata().getModel());
 
-        String response = vectorStoreConfig.chat(message);
+        ChatResponseDTO response = vectorStoreConfig.chat(message);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response.getChoices().get(0).getMessage().getContent());
     }
 
 }
