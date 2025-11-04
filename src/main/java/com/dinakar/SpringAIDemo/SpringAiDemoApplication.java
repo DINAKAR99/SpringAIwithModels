@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

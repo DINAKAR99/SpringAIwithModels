@@ -1,3 +1,4 @@
+package com.dinakar.SpringAIDemo;
 // package com.telusko.SpringAIDemo;
 
 // import org.springframework.ai.openai.OpenAiChatModel;

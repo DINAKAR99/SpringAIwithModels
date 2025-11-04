@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo;
+package com.dinakar.SpringAIDemo;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;

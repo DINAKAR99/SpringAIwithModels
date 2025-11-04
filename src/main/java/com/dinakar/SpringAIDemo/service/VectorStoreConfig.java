@@ -1,4 +1,4 @@
-package com.telusko.SpringAIDemo.service;
+package com.dinakar.SpringAIDemo.service;
 
 import java.util.List;
 import java.util.Map;
