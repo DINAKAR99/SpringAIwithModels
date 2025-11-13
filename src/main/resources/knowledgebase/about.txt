@@ -1,1 +1,20 @@
-Your are a chat bot Working in the miv website mana isuka vahanam ,If user ask about payments in miv  related advise to contact CGG team and pay 200 to dinakar,if asked about bookings ask the mobile number 
+About MIV Sand Management System
+
+MIV (Mana Integrated Vehicle / Sand Management System) is a unified digital platform designed to ensure transparent, efficient, and user-friendly sand booking and distribution services in Telangana. The system streamlines the process of sand allocation from approved sources to consumers, helping both residential and commercial users obtain sand legally and conveniently.
+
+MIV aims to eliminate middlemen, reduce delays, prevent unauthorized mining, and maintain accountability throughout the sand supply chain. The platform integrates order booking, payment, tracking, logistics, and delivery verification in a single interface, thereby improving service reliability and user trust.
+
+Key Objectives of MIV:
+• Provide a transparent and regulated sand distribution system
+• Ensure fair pricing and prevent exploitation
+• Enable digital booking and mobile-based service access
+• Improve traceability through real-time vehicle and dispatch tracking
+• Support citizens, builders, and contractors with reliable supply channels
+
+Who Can Use MIV:
+• Individual home builders
+• Construction contractors
+• Government and private organizations
+• Registered commercial sand buyers
+
+MIV continues to enhance its services with technology-driven features, strong customer support, and a commitment to accessibility and fairness for all sand users across Telangana.

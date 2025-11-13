@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###
+react
+# node modules
+node_modules
+# Ignore ALL node_modules everywhere
+node_modules/
+**/node_modules/
+

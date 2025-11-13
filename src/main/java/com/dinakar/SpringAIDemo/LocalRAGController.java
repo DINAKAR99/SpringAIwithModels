@@ -44,7 +44,7 @@ public class LocalRAGController {
     }
 
     private void loadDocs() throws IOException {
-        List<String> files = List.of("about.txt", "faq.txt", "product_info.txt");
+        List<String> files = List.of("about.txt", "faq.txt");
         for (String file : files) {
             var resource = new ClassPathResource("knowledgebase/" + file);
             String content = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -60,20 +60,18 @@ public class LocalRAGController {
 
         String context = (dbContext.isEmpty()) ? docContext : (docContext + "\n\nDB Context:\n" + dbContext);
 
-        String prompt = """
-                You are a friendly chatbot  assistant in TGMIV website in Telangana for sand Bookings and all other queries.
-                Use the context below to answer naturally.
+      String prompt = String.format(
+        "You are a friendly chatbot assistant in TGMIV website in Telangana for sand Bookings and all other queries.\n" +
+        "Use the context below to answer naturally.\n\n" +
+        "Context:\n%s\n\n" +
+        "Question:\n%s",
+        context, message
+        );
 
-                Context:
-                %s
 
-                Question:
-                %s
-                """
-                .formatted(context, message);
 
         // String response = chatModel.call(prompt);
-        ChatResponseDTO response = vectorStoreConfig.chat(prompt);
+        ChatResponseDTO response = vectorStoreConfig.chat(message);
         return ResponseEntity.ok(response.getChoices().get(0).getMessage().getContent());
     }
 
