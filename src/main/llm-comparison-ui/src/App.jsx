@@ -13,6 +13,7 @@ function App() {
     []
   );
 const textareaRef = useRef(null);
+const [isHome, setIsHome] = useState(true);
 
   const [messages, setMessages] = useState([]);
   const [prompt, setPrompt] = useState("");
@@ -63,7 +64,7 @@ const textareaRef = useRef(null);
           return updated;
         });
 
-        await new Promise((res) => setTimeout(res, 1)); // speed of typing
+        await new Promise((res) => setTimeout(res, 0 )); // speed of typing
       }
 
     }
@@ -118,7 +119,28 @@ const textareaRef = useRef(null);
 </aside>
 
 
-      {/* Chat area */}
+    {isHome ? (
+  <div className="home-hero">
+    <div className="hero-content">
+      <h1 className="hero-title">What's on your mind today ?</h1>
+
+      <textarea
+        className="hero-input"
+        placeholder="Ask Anything"
+        style={{color:"white"}}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            setIsHome(false);
+            handleSend();
+          }
+        }}
+      />
+    </div>
+  </div>
+) : (
       <main className="chat-area">
 
         <div className="messages">
@@ -226,6 +248,7 @@ const textareaRef = useRef(null);
 
 
       </main>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-package com.dinakar.SpringAIDemo;
+package com.dinakar.SpringAIDemo.Controller;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dinakar.SpringAIDemo.service.VectorStoreConfig;
+import com.dinakar.SpringAIDemo.Config.VectorStoreConfig;
+import com.dinakar.SpringAIDemo.DTO.ChatResponseDTO;
 
 @RestController
 @RequestMapping("/api/ollama")

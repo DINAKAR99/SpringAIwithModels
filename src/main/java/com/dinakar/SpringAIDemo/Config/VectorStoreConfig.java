@@ -1,4 +1,4 @@
-package com.dinakar.SpringAIDemo.service;
+package com.dinakar.SpringAIDemo.Config;
 
 import java.util.List;
 import java.util.Map;
@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.dinakar.SpringAIDemo.ChatResponseDTO;
+import com.dinakar.SpringAIDemo.DTO.ChatResponseDTO;
 
 @Configuration
 public class VectorStoreConfig {
 
-    private static final String OLLAMA_URL = "https://medha.cgg.gov.in/v1";
-    private static final String API_KEY = "sk-uvYL8gRRQvIKiPcLhbWO6w";
+    private static final String OLLAMA_URL = "https://litellm.cgg.gov.in/v1";
+    private static final String API_KEY = "sk-vyMcsfhInXwBWeoCFnrs3g";
 
     @Bean
     public RestClient restClient() {
@@ -60,7 +60,7 @@ public class VectorStoreConfig {
                 "content", prompt);
 
         Map<String, Object> body = Map.of(
-                "model", "ollama/CGG-Assisted-Coder:latest",
+                "model", "ollama/Qwen2.5-Coder-32B-Instruct",
                 "messages", List.of(message));
 
         ChatResponseDTO chatResponse = restClient().post()

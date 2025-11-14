@@ -1,5 +1,5 @@
 
-package com.dinakar.SpringAIDemo;
+package com.dinakar.SpringAIDemo.Controller;
  import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
